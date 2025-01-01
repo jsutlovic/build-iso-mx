@@ -1,0 +1,36 @@
+#----------------------------------------------------------------------
+# defaults file for build-iso
+#
+# This file contains almost all of the variables that determine what
+# actually gets built.  It has a middle priority in between
+# defaults-system which has the lowest priority and defaults-local
+# which has the highest
+#----------------------------------------------------------------------
+
+DISTRO_VERSION="23.4_confiso"
+RELEASE_DATE="Dec 30, 2024"
+
+ARCH="amd64"
+ISO_FLAV="mxconf64"
+THEME="mxmin"
+
+ENABLE_LOCALES="default"
+
+# DE particular items
+X_TERM_EMULATOR="/usr/bin/xfce4-terminal.wrapper"
+CURSOR_ICON_THEME="/usr/share/icons/DMZ-Black/cursor.theme"
+
+#COMPRESSION_TYPE="xz"
+#COMPRESSION_TYPE_CODE="-comp xz -b 262144"
+COMPRESSION_TYPE="lz4"
+COMPRESSION_TYPE_CODE="-comp lz4 -Xhc"
+
+LIVE_USER="ansible"
+NEW_HOSTNAME="ansible-config"
+
+LOCALE="en_US.UTF-8"
+MIRROR="us"
+TIME_ZONE="America/New_York"
+
+# Don't sign for now
+SIGN_FILES="false"
