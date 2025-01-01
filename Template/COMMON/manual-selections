@@ -27,3 +27,4 @@ keyboard-configuration	keyboard-configuration/xkb-keymap	select	us
 libpaper1	libpaper/defaultpaper	select	letter
 libpaper1:amd64	libpaper/defaultpaper	select	letter
 libpaper1:i386	libpaper/defaultpaper	select	letter
+firmware-ipw2x00	firmware-ipw2x00/license/accepted	boolean	true

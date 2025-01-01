@@ -1144,6 +1144,8 @@ do_stage_4() {
         : ${NEW_HOSTNAME:=antix1}
         say "Set hostname to $(pq $NEW_HOSTNAME)"
         echo $NEW_HOSTNAME > /etc/hostname
+        # Fix sudo very slow on changed hostname
+        sed -i "s/mx1/$NEW_HOSTNAME/" /etc/hosts
 
         if [[ -z $NO_SET_HOSTNAME ]]; then
             say "run hostname command"
@@ -1471,6 +1473,10 @@ Eth0_entry
     local exclude_files="$sqfs_dir/usr/local/share/excludes/*.list"
     local efile ofile
     for efile in $exclude_files; do
+        # Skip symlinked files (mx-snapshot-exclude) from causing errors
+        if [[ -L efile ]]; then
+            continue
+        fi
         ofile=${efile%.list}.orig
         $SUDO cp $efile $ofile
         $SUDO chmod a-wx $ofile
@@ -1972,7 +1978,7 @@ leave_stage() {
 mount_tmpfs() {
     local dir needed name
     dir=${1:-$sqfs_dir}
-    needed=$(((TMPFS_SIZE * $(gather_cnt package))/ 10 ))
+    needed=$(((${TMPFS_SIZE} * $(gather_cnt package))/ 10 ))
     name=$(basename $dir)
 
     [[ -n $dir ]] || fatal "Can't mount_tmpfs() without a directory specified"
@@ -3714,7 +3720,7 @@ do_one_stat() {
     else
         gather_say package            "    $(pqn %3d) antiX                package%s"
     fi
-    local needed=$(((TMPFS_SIZE * $(gather_cnt package))/ 10 ))
+    local needed=$(((${TMPFS_SIZE} * $(gather_cnt package))/ 10 ))
     say "$(printf "size of tmps: $(pqn %6d) meg\n" $needed)"
 }
 
@@ -4057,7 +4063,7 @@ zsyncmake_file() {
     local dir file
     dir=$(dirname $1)
     file=$(basename $1)
-    (cd $dir && zsyncmake -e $file)
+    (cd $dir && zsyncmake -e -u $file)
 }
 
 #------------------------------------------------------------------------------
