@@ -14,7 +14,9 @@ ARCH="amd64"
 ISO_FLAV="mxconf64"
 THEME="mxmin"
 
-ENABLE_LOCALES="default"
+# Single locale for faster build
+#ENABLE_LOCALES="default"
+ENABLE_LOCALES="Single"
 
 # DE particular items
 X_TERM_EMULATOR="/usr/bin/xfce4-terminal.wrapper"
@@ -34,3 +36,6 @@ TIME_ZONE="America/New_York"
 
 # Don't sign for now
 SIGN_FILES="false"
+
+# Bigger TMPFS
+TMPFS_SIZE="2500 + 200"

@@ -953,7 +953,19 @@ do_stage_4() {
         && do_part 7 "Install pesky packages"; then
         gather_say pesky-package "Install $(pqn %n) pesky package%s"
         for package in $(compile_pkg_list pesky-package exclude-chroot); do
-            DEBIAN_FRONTEND=dialog apt-get install $apt_yes $package
+            say "Installing $package"
+            # Force new configurations for packages which conflicts
+            # See man dpkg under --force-things for more info
+            if [[ -n $full_auto && "$package" =~ modified ]]; then
+                say "Modified package, using forced apt config"
+                DEBIAN_FRONTEND=noninteractive apt-get \
+                    -o Dpkg::Options::="--force-overwrite" \
+                    -o Dpkg::Options::="--force-confnew" \
+                    -o Dpkg::Options::="--force-confmiss" \
+                    install $apt_yes $package
+            else
+                DEBIAN_FRONTEND=dialog apt-get install $apt_yes $package
+            fi
         done
         end_part_lax
     else
@@ -1474,7 +1486,7 @@ Eth0_entry
     local efile ofile
     for efile in $exclude_files; do
         # Skip symlinked files (mx-snapshot-exclude) from causing errors
-        if [[ -L efile ]]; then
+        if [[ -L $efile ]]; then
             continue
         fi
         ofile=${efile%.list}.orig
@@ -4063,7 +4075,7 @@ zsyncmake_file() {
     local dir file
     dir=$(dirname $1)
     file=$(basename $1)
-    (cd $dir && zsyncmake -e -u $file)
+    (cd $dir && zsyncmake -e -u $file $file)
 }
 
 #------------------------------------------------------------------------------

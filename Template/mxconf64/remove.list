@@ -5,6 +5,7 @@ alsa-utils
 apt-utils
 apt-xapian-index
 blt
+broadcom-sta-dkms
 cabextract
 cifs-utils
 cups
@@ -88,6 +89,8 @@ psutils
 pv
 python3-bluez
 rpl
+rtl8812au-dkms
+rtl8821cu-dkms
 samba
 samba-common
 samba-libs
